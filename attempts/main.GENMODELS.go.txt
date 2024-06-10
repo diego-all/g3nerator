@@ -1,0 +1,68 @@
+package main
+
+import (
+	"fmt"
+	"os"
+	"text/template"
+)
+
+// Template de la estructura de models
+const modelTemplate = `package models
+
+import (
+	"database/sql"
+	"time"
+)
+
+const dbTimeout = time.Second * 3
+
+var db *sql.DB
+
+func New(dbPool *sql.DB) Models {
+	db = dbPool
+	return Models{
+		{{.Class}}: {{.Class}}{},
+	}
+}
+
+type Models struct {
+	{{.Class}} {{.Class}}
+}
+`
+
+// Datos para sustituir en la plantilla
+type TemplateData struct {
+	Class string
+}
+
+func main() {
+	// Solicitar al usuario el valor para {{.Class}}
+	var className string
+	println("Ingresa el nombre de la clase:")
+	fmt.Scanln(&className)
+
+	// Crear una instancia de TemplateData con el valor ingresado por el usuario
+	data := TemplateData{
+		Class: className,
+	}
+
+	// Crear y parsear la plantilla
+	tmpl, err := template.New("model").Parse(modelTemplate)
+	if err != nil {
+		panic(err)
+	}
+
+	// Ejecutar la plantilla con los datos proporcionados y escribir el resultado en un archivo
+	file, err := os.Create("models.go")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	err = tmpl.Execute(file, data)
+	if err != nil {
+		panic(err)
+	}
+
+	println("Archivo models.go generado con éxito")
+}

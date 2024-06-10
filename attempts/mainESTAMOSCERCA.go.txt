@@ -1,0 +1,97 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"g3nerator/models"
+	"io/ioutil"
+)
+
+func decodificarJSON(jsonData []byte) (map[string]interface{}, error) {
+	//var productos []Product
+	var productos []models.Product
+	err := json.Unmarshal(jsonData, &productos)
+	if err != nil {
+		return nil, err
+	}
+
+	producto := productos[0] // Suponiendo que solo hay un producto en el JSON
+
+	fmt.Println("La clase es: ", producto.Tipo)
+
+	// Acceder a un map dentro de una interface
+
+	atributosMap := make(map[string]interface{})
+	for nombreAtributo, valor := range producto.Atributos {
+
+		fmt.Printf("%s: %v \n", nombreAtributo, valor)
+
+		fmt.Println("NombreAtributo es:", nombreAtributo)
+		// nombresito := nombreAtributo
+		// fmt.Println(nombresito)
+
+		// Verificar si el tipo subyacente es un mapa
+		if datos, ok := valor.(map[string]interface{}); ok {
+			// Acceder a los valores dentro del mapa
+			if tipoDato, ok := datos["tipoDato"].(string); ok {
+				fmt.Println("Tipo de dato:", tipoDato)
+			} else {
+				fmt.Println("Error al acceder al tipo de dato")
+			}
+
+			if valorInt, ok := datos["valor"].(float64); ok {
+				fmt.Println("Valor:", valorInt)
+			} else {
+				fmt.Println("Error al acceder al valor")
+			}
+		} else {
+			fmt.Println("No se pudo convertir a un mapa")
+		}
+
+		// valorsito := valor
+		// fmt.Println(valorsito)
+
+		//atributosMap[nombreAtributo] = valor["tipoDato"]
+
+		fmt.Println("\n")
+
+	}
+
+	return atributosMap, nil
+}
+
+func main() {
+	// ./ indica la carpeta actual (raiz del proyecto)
+	archivoJSON := "./inputs/product.json"
+	// Leer el contenido del archivo JSON
+	jsonData, err := ioutil.ReadFile(archivoJSON)
+	if err != nil {
+		fmt.Println("Error al leer el archivo JSON:", err)
+		return
+	}
+
+	// almacenar los atributos
+	var atributosArray []string
+
+	//fmt.Println(jsonData)
+
+	// Decodificar JSON en la estructura Product
+	atributosMap, err := decodificarJSON(jsonData)
+	if err != nil {
+		fmt.Println("Error al decodificar JSON:", err)
+	} else {
+		fmt.Println("Atributos del producto:")
+		for nombreAtributo, valor := range atributosMap {
+
+			//fmt.Printf("%s: %v\n", nombreAtributo, valor, tipoDato)
+			fmt.Println("\n")
+			fmt.Println(nombreAtributo, valor)
+			//fmt.Printf("%s: %v\n", nombreAtributo, valor)
+			atributosArray = append(atributosArray, nombreAtributo)
+
+		}
+	}
+
+	fmt.Println("atributosArray: ", atributosArray)
+
+}

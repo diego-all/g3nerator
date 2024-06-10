@@ -1,0 +1,47 @@
+package main
+
+// https://gist.github.com/sandeep-sarkar/78a0e96461b4dec727386a96404d29b0
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+func printJson(res1 map[string]interface{}, res2 []interface{}) {
+	for k, v := range res1 {
+		switch vv := v.(type) {
+		case float64, int, string:
+			fmt.Println(k, ":", vv)
+		case []interface{}:
+			fmt.Println(k, ":")
+			printJson(nil, vv)
+		case map[string]interface{}:
+			fmt.Println(k, ":")
+			printJson(vv, nil)
+		default:
+			fmt.Println(k, ":", vv)
+		}
+	}
+	for k, v := range res2 {
+		fmt.Println("entro aca")
+		switch vv := v.(type) {
+		case float64, int, string:
+			fmt.Println(k, ":", vv)
+		case []interface{}:
+			fmt.Println(k, ":")
+			printJson(nil, vv)
+		case map[string]interface{}:
+			fmt.Println(k, ":")
+			printJson(vv, nil)
+		default:
+			fmt.Println(k, ":", vv)
+		}
+	}
+}
+
+func main() {
+	js := `{"a":1, "b":2, "c":3, "d":[{"d1":4},{"d2":5}]}`
+	var res map[string]interface{}
+	json.Unmarshal([]byte(js), &res)
+	printJson(res, nil)
+}

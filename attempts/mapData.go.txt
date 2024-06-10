@@ -1,0 +1,43 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+func main() {
+	// json string
+	jsonStr := `{
+        "Name": "noknow",
+        "Age": 2,
+        "Admin": true,
+        "Hobbies": ["IT","Travel"],
+        "Address": {
+            "PostalCode": 1111,
+            "Country": "Japan"
+        },
+        "Null": null
+    }`
+
+	// Convert json string to map[string]interface{}
+	var mapData map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &mapData); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(mapData["Name"], mapData["Age"], mapData["Admin"], mapData["Hobbies"])
+
+	fmt.Println("oelo")
+
+	fmt.Println(mapData["Name"], mapData["Name"], mapData["Age"], mapData["Age"], mapData["Admin"], mapData["Admin"], mapData["Hobbies"], mapData["Hobbies"], mapData["Address"], mapData["Address"], mapData["Null"], mapData["Null"])
+
+	// Output
+	//     fmt.Printf("Name: %v (%T)
+	// Age: %v (%T)
+	// Admin: %v (%T)
+	// Hobbies: %v (%T)
+	// Address: %v (%T)
+	// Null: %v (%T)
+	// ", mapData["Name"], mapData["Name"], mapData["Age"], mapData["Age"], mapData["Admin"], mapData["Admin"], mapData["Hobbies"], mapData["Hobbies"], mapData["Address"], mapData["Address"], mapData["Null"], mapData["Null"])
+
+}

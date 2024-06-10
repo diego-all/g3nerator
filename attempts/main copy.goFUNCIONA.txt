@@ -1,0 +1,53 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"g3nerator/models"
+	"io/ioutil"
+)
+
+func decodificarJSON(jsonData []byte) (map[string]interface{}, error) {
+	//var productos []Product
+	var productos []models.Product
+	err := json.Unmarshal(jsonData, &productos)
+	if err != nil {
+		return nil, err
+	}
+
+	producto := productos[0] // Suponiendo que solo hay un producto en el JSON
+
+	fmt.Println("La clase es: ", producto.Tipo)
+
+	atributosMap := make(map[string]interface{})
+	for nombreAtributo, valor := range producto.Atributos {
+		atributosMap[nombreAtributo] = valor
+	}
+
+	return atributosMap, nil
+}
+
+func main() {
+	// ./ indica la carpeta actual (raiz del proyecto)
+	archivoJSON := "./inputs/product.json"
+	// Leer el contenido del archivo JSON
+	jsonData, err := ioutil.ReadFile(archivoJSON)
+	if err != nil {
+		fmt.Println("Error al leer el archivo JSON:", err)
+		return
+	}
+
+	//fmt.Println(jsonData)
+
+	// Decodificar JSON en la estructura Product
+	atributosMap, err := decodificarJSON(jsonData)
+	if err != nil {
+		fmt.Println("Error al decodificar JSON:", err)
+	} else {
+		fmt.Println("Atributos del producto:")
+		for nombreAtributo, valor := range atributosMap {
+			fmt.Printf("%s: %v\n", nombreAtributo, valor)
+		}
+	}
+
+}

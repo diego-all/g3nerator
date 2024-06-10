@@ -1,0 +1,93 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+)
+
+// Considerar los created_at, updated_at.  ESTATICOS EN PLANTILLA
+
+//stringers //personalizar el output de structs , interfaces y listas de interfaces
+
+// Sencillo
+type simpleProduct struct {
+	Nombre      string `json:"nombre"`
+	Descripcion string `json:"descripcion"`
+	Precio      int    `json:"precio"`
+}
+
+type Atributo struct {
+	Valor    string `json:"valor"`
+	TipoDato string `json:"tipoDato"`
+}
+
+type Producto struct {
+	Tipo      string              `json:"tipo"`
+	Atributos map[string]Atributo `json:"atributos"`
+}
+
+func main() {
+
+	// Ruta del archivo JSON
+	//archivoJSON := "/home/diegoall/MAESTRIA_ING/g3nerator/inputs/product.json" // Reemplace con la ruta real del archivo
+
+	// ../ indicaba subir un nivel en la jerarquía de carpetas. Sin embargo, la estructura de directorios proporcionada no tiene un nivel superior a la carpeta actual (main.go).
+	//archivoJSON := "../inputs/product.json" // Reemplace con la ruta real del archivo
+
+	// ./ indica la carpeta actual (raiz del proyecto)
+	archivoJSON := "./inputs/product.json" // Reemplace con la ruta real del archivo
+
+	// Leer el contenido del archivo JSON
+	jsonData, err := ioutil.ReadFile(archivoJSON)
+	if err != nil {
+		fmt.Println("Error al leer el archivo JSON:", err)
+		return
+	}
+
+	// Decodificar JSON en la estructura Product
+	var productos Product
+	err = json.Unmarshal(jsonData, &productos)
+	if err != nil {
+		fmt.Println("Error al decodificar JSON:", err)
+		return
+	}
+
+	// Recorrer productos y acceder a sus atributos
+	for _, producto := range productos {
+		fmt.Println("Tipo:", producto.Tipo)
+		fmt.Println("Atributos:")
+		for nombreAtributo, atributo := range producto.Atributos {
+			switch nombreAtributo {
+			case "nombre":
+				fmt.Printf("\tNombre: %s (Valor: %s, Tipo: %s)\n", nombreAtributo, atributo.Nombre.Valor, atributo.Nombre.TipoDato)
+			case "descripcion":
+				fmt.Printf("\tDescripcion: %s (Valor: %s, Tipo: %s)\n", nombreAtributo, atributo.Descripcion.Valor, atributo.Descripcion.TipoDato)
+			case "precio":
+				fmt.Printf("\tPrecio: %s (Valor: %d, Tipo: %s)\n", nombreAtributo, atributo.Precio.Valor, atributo.Precio.TipoDato)
+			}
+		}
+	}
+
+	// // Decodificar JSON en array de productos
+	// var productos []Producto
+	// err = json.Unmarshal(jsonData, &productos)
+	// if err != nil {
+	// 	fmt.Println("Error al decodificar JSON:", err)
+	// 	return
+	// }
+
+	// // ... (resto del código para recorrer productos y acceder a sus atributos, igual que antes)
+	// // Recorrer productos y acceder a sus atributos
+	// for _, producto := range productos {
+	// 	fmt.Println("Tipo:", producto.Tipo)
+	// 	for nombreAtributo, atributo := range producto.Atributos {
+	// 		fmt.Printf("\tAtributo: %s - Valor: %s (Tipo: %s)\n", nombreAtributo, atributo.Valor, atributo.TipoDato)
+	// 	}
+	// }
+
+}
+
+func readJSON() {
+
+}

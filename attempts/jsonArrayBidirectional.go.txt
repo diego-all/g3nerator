@@ -1,0 +1,45 @@
+package main
+
+// 2014-04-19
+// https://go.dev/play/p/Thl5xU7AiN
+
+//https://stackoverflow.com/questions/23287140/how-do-i-iterate-over-a-json-array-in-golang
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// type itemdata struct {
+// 	data1 int // I have tried making these strings
+// 	data2 int
+// 	data3 int
+// }
+
+// func main() {
+// 	datas := []itemdata{}
+
+// 	json.Unmarshal([]byte(`[["7293","1434","99646"],["4657","1051","23795"]]`), &datas)
+// 	// I have tried the JSON string without the qoutes around the numbers
+// 	fmt.Println(len(datas))    // This prints '2'
+// 	fmt.Println("This prints") // This does print
+// 	for i := range datas {
+// 		fmt.Println(datas[i].data1) // This prints '0', two times
+// 	}
+// 	fmt.Println("And so does this") // This does print
+// }
+
+type itemdata [][]string
+
+func main() {
+	var datas itemdata
+
+	json.Unmarshal([]byte(`[["7293","1434","99646"],["4657","1051","23795"],["4657","1051","23795"]]`), &datas)
+	fmt.Println(len(datas))
+	fmt.Println("This prints")
+	for i := range datas {
+
+		fmt.Println(datas[i][0])
+	}
+	fmt.Println("And so does this")
+}
