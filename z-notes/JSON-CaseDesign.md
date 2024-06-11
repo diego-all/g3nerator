@@ -78,3 +78,9 @@ Escalabilidad: Se puede ampliar fácilmente para incluir nuevas clases y atribut
 ]
 
 ~~~~ 
+
+
+Para que sea generico:
+
+
+La función decodificarJSON debe decodificar el JSON en un slice de Producto en lugar de un slice de models.Product. Además, debe iterar sobre los atributos de cada producto y verificar si son de tipo map[string]interface{}. Si lo son, debe extraer el tipo de dato del campo "tipoDato" y crear un nuevo objeto Atributo con esa información

@@ -3,18 +3,23 @@
       "tipo": "Product",
       "atributos": {
         "nombre": {
+          "valor": "Camiseta",
           "tipoDato": "string"
         },
         "descripcion": {
+          "valor": "Camiseta roja de algodón",
           "tipoDato": "string"
         },
         "precio": {
+          "valor": 25000,
           "tipoDato": "integer"
         },
         "stock": {
+          "valor": 200,
           "tipoDato": "integer"
         },
         "IVA": {
+          "valor": 0.12,
           "tipoDato": "integer"
         }
       }

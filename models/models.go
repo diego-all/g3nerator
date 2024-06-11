@@ -53,3 +53,10 @@ type Atributo struct {
 	Valor    interface{} `json:"valor"`
 	TipoDato string      `json:"tipoDato"`
 }
+
+// generico
+
+type Producto struct {
+	Tipo      string     `json:"tipo"`
+	Atributos []Atributo `json:"atributos"`
+}

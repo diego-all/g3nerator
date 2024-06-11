@@ -1,0 +1,74 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+)
+
+type Atributo interface {
+	Nombre() string
+	TipoDato() string
+}
+
+type Producto struct {
+	Tipo      string     `json:"tipo"`
+	Atributos []Atributo `json:"atributos"`
+}
+
+func decodificarJSON(jsonData []byte) ([]Producto, map[string]map[string]string, error) {
+	var productos []Producto
+	err := json.Unmarshal(jsonData, &productos)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	typeInformation := make(map[string]map[string]string)
+
+	for _, producto := range productos {
+		tipoProducto := producto.Tipo
+
+		atributosTipo := make(map[string]string)
+		for _, atributo := range producto.Atributos {
+			nombreAtributo := atributo.Nombre()
+
+			if datos, ok := atributo.(map[string]interface{}); ok {
+				if tipoDato, ok := datos["tipoDato"].(string); ok {
+					atributosTipo[nombreAtributo] = tipoDato
+				} else {
+					fmt.Println("Error al acceder al tipo de dato del atributo:", nombreAtributo)
+				}
+			} else {
+				fmt.Println("El atributo", nombreAtributo, "no es un map[string]interface{}")
+			}
+		}
+
+		typeInformation[tipoProducto] = atributosTipo
+	}
+
+	return productos, typeInformation, nil
+}
+
+func main() {
+	// Leer el contenido del archivo JSON
+	jsonData, err := ioutil.ReadFile("./inputs/classes.json")
+	if err != nil {
+		fmt.Println("Error al leer el archivo JSON:", err)
+		return
+	}
+
+	// Decodificar JSON en slices de Producto y un map de información de tipos
+	productos, typeInformation, err := decodificarJSON(jsonData)
+	if err != nil {
+		fmt.Println("Error al decodificar JSON:", err)
+		return
+	}
+
+	// Imprimir información de cada tipo
+	for tipoProducto, atributosTipo := range typeInformation {
+		fmt.Println("\nTipo:", tipoProducto)
+		for nombreAtributo, tipoDato := range atributosTipo {
+			fmt.Printf("- %s: %s\n", nombreAtributo, tipoDato)
+		}
+	}
+}

@@ -11,3 +11,5 @@ Tipos de datos definidos por el usuario
 
     ya habia hecho la parte de go run <repo> init retomar, es decir la estructura inicial del CLI.
 
+    Validar consistencia del JSON. (Buscar libreria o algo para JSON genericos)
+
